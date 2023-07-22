@@ -6,9 +6,9 @@ import NoticePrivacy from './notice-privacy';
 import { Router } from 'preact-router';
 
 const LandingPage = () => {
-    // @ts-ignore
+    // @ts-ignore TODO: remove this comment when theme changing funcionalitie is applied
     const [background, setBackground] = useState(`/${BACKGROUND.mortal_kombat}.jpg`);
-    // @ts-ignore
+    // @ts-ignore TODO: remove this comment when theme changing funcionalitie is applied
     const [theme, setTheme] = useState(THEME);
 
     const landingPageStyle = {

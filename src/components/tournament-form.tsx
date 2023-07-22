@@ -36,8 +36,6 @@ const tournamentFormStyle = (theme: ThemeType, isMobile: boolean) => ({
 
 
 const TournamentForm = ({ theme } : {theme: ThemeType}) => {
-
-    //TODO: REFACTOR THIS MESS WITH A STATE OBJECT FOR INPUT VALUES AND INPUT MANDATORY VALIDATORS
     const [fieldData, setFieldData] = useState<fielDataType>(FIELD_DATA);
     const [isMissingData, setIsMissingData] = useState<MissingDataType>(MISSING_DATA);
     const [showThanks, setShowThanks] = useState<boolean>(false);
@@ -96,7 +94,9 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
                     !fieldData[key as keyof fielDataType].value  && 
                     fieldData[key as keyof fielDataType].value !== '0'
                 ){
+                    //TODO: Refactor this as it works because it runs on every key iteration and it changes the age.value in any of these iterations
                     if((parseInt(fieldData.age.value) < 18)) {
+                        console.log("holoooo")
                         setIsMissingData((currValue) => ({
                             ...currValue,
                             ...{age: {value: true, label: 'age'}}

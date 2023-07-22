@@ -37,8 +37,8 @@ const TournamentInput = ({
         <div style={{position: 'relative', margin: '3px auto', padding: '0 10px'}}>
             <label htmlFor="" style={{paddingLeft:'15px'}}>{label}</label>
             <input 
-                // @ts-ignore TODO
-                value={country && inputValue[labelName].value === '' ? COUNTRY_CODES[country] : inputValue[labelName].value} 
+                // @ts-ignore TODO values in fieldDataType can be boolean because of the checkboxes, refactor this to only get string | number (Maybe moving checkbox values to other type)
+                value={country && inputValue[labelName as keyof fielDataType].value === '' ? COUNTRY_CODES[country] : inputValue[labelName as keyof fielDataType].value} 
                 type="text" style={{...tournamentInputStyle, width: `${width}%`}}
                 onInput={(e) => setInputValue( (currData: fielDataType) => ({
                     ...currData, 
