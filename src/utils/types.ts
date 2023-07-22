@@ -37,3 +37,17 @@ export type fielDataType = {
     checkedLegalAge: {value: boolean, label: string},
     checkedNewsletter: {value: boolean, label: string},
 }
+
+export type MissingDataType = {
+    gamingConsole: {value: boolean, label: string},
+    country: {value: boolean, label: string},
+    name: {value: boolean, label: string},
+    phone: {value: boolean, label: string},
+    mail: {value: boolean, label: string},
+    gamingId: {value: boolean, label: string},
+    age: {value: boolean, label: string},
+    checkedPrivacy: {value: boolean, label: string},
+    checkedTerms: {value: boolean, label: string},
+    checkedLegalAge: {value: boolean, label: string},
+    checkedNewsletter: {value: boolean, label: string},
+}

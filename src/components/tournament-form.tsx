@@ -1,15 +1,19 @@
 import { useState } from 'preact/hooks';
 import { JSX } from 'preact';
 import emailjs from '@emailjs/browser';
-
-// @ts-ignore
-import { USER_ID, FIELD_LABEL, COUNTRIES, GAMING_CONSOLE, FIELD_DATA } from '../utils/constants'
+import {
+    FIELD_LABEL, 
+    COUNTRIES, 
+    GAMING_CONSOLE, 
+    FIELD_DATA, 
+    MISSING_DATA 
+} from '../utils/constants'
 import TournamentInput from './tournament-input';
 import TournamentSelector from './tournament-selector';
 import TournamentCheckbox from './tournament-checkbox';
 import TournamentButton from './tournament-button';
 import { useGetUserId, useMediaQuery } from '../utils/hooks';
-import { ThemeType, TemplateParamsType, fielDataType } from '../utils/types';
+import { ThemeType, TemplateParamsType, fielDataType, MissingDataType } from '../utils/types';
 import ThanksMsg from './thanks-msg';
 
 const tournamentFormStyle = (theme: ThemeType, isMobile: boolean) => ({
@@ -34,37 +38,23 @@ const tournamentFormStyle = (theme: ThemeType, isMobile: boolean) => ({
 const TournamentForm = ({ theme } : {theme: ThemeType}) => {
 
     //TODO: REFACTOR THIS MESS WITH A STATE OBJECT FOR INPUT VALUES AND INPUT MANDATORY VALIDATORS
-    const [fieldData, setFieldData] = useState<fielDataType>(FIELD_DATA)
-
-    const [gamingConsole, setGamingConsole] = useState<string | null>(null);
-    const [country, setCountry] = useState<string | null>(null);
-    const [name, setName] = useState<string | null>(null);
-    const [phone, setPhone] = useState<string | null>(null);
-    const [mail, setMail] = useState<string | null>(null);
-    const [gamingId, setGamingId] = useState<string | null>(null);
-    const [age, setAge] = useState<string | null>(null);
-    const [checkedPrivacy, setCheckedPrivacy] = useState<boolean>(false);
-    const [checkedTerms, setCheckedTerms] = useState<boolean>(false);
-    const [checkedLegalAge, setCheckedLegalAge] = useState<boolean>(false);
-    const [checkedNewsletter, setCheckedNewsletter] = useState<boolean>(false);
-
+    const [fieldData, setFieldData] = useState<fielDataType>(FIELD_DATA);
+    const [isMissingData, setIsMissingData] = useState<MissingDataType>(MISSING_DATA);
     const [showThanks, setShowThanks] = useState<boolean>(false);
     const [buttonLoading, setButtonLoading] = useState<boolean>(false);
-
-    const [isMissingGamingConsole, setIsMissingGamingConsole] = useState<boolean>(false);
-    const [isMissingCountry, setIsMissingCountry] = useState<boolean>(false);
-    const [isMissingName, setIsMissingName] = useState<boolean>(false);
-    const [isMissingPhone, setIsMissingPhone] = useState<boolean>(false);
-    const [isMissingMail, setIsMissingMail] = useState<boolean>(false);
-    const [isMissingGamingId, setIsMissingGamingId] = useState<boolean>(false);
-    const [isMissingAge, setIsMissingAge] = useState<boolean>(false);
-    const [isMissinghCheckedPrivacy, setIsMissingCheckedPrivacy] = useState<boolean>(false);
-    const [isMissingCheckedTerms, setIsMissingCheckedTerms] = useState<boolean>(false);
-    const [isMissingCheckedLegalAge, setIsMissingCheckedLegalAge] = useState<boolean>(false);
-    const [isMissingCheckedNewsletter, setIsMissingCheckedNewsletter] = useState<boolean>(false);
-
-    
-
+    const {
+        name,
+        country,
+        phone,
+        mail,
+        gamingConsole,
+        gamingId,
+        age,
+        checkedPrivacy,
+        checkedTerms,
+        checkedNewsletter,
+        checkedLegalAge,
+    } = fieldData;
 
     const sendMail = (templateParams: TemplateParamsType) => {
         emailjs.send('service_dbwf38t', 'template_fgzy6po', templateParams, '4di1TLKuQ-VAf7TjU')
@@ -79,41 +69,50 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
     const handleSubmit = (e: JSX.TargetedMouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         const templateParams: TemplateParamsType = {
-            name: fieldData.name.value,
-            country: fieldData.country.value,
-            phone: fieldData.phone.value,
-            mail: fieldData.mail.value,
-            gamingConsole: fieldData.gamingConsole.value,
-            gamingId: fieldData.gamingId.value,
-            age: fieldData.age.value,
-            newsletter: fieldData.checkedNewsletter.value ? 'Si' : 'No',
+            name: name.value,
+            country: country.value,
+            phone: phone.value,
+            mail: mail.value,
+            gamingConsole: gamingConsole.value,
+            gamingId: gamingId.value,
+            age: age.value,
+            newsletter: checkedNewsletter.value ? 'Si' : 'No',
         }
-        console.log(templateParams);
         const isFormFilled = !Object.values(templateParams).some((val) => !val && val !== '0' );
-        console.log(isFormFilled);
         if(
             isFormFilled 
-            && fieldData.checkedLegalAge.value 
-            && fieldData.checkedPrivacy.value 
-            && fieldData.checkedTerms.value 
-            && fieldData.checkedNewsletter.value 
-            && fieldData.age.value 
-            && parseInt(fieldData.age.value) >= 18
+            && checkedLegalAge.value 
+            && checkedPrivacy.value 
+            && checkedTerms.value 
+            && checkedNewsletter.value 
+            && age.value 
+            && parseInt(age.value) >= 18
         ) {
             setButtonLoading(true);
-            //sendMail(templateParams);
+            sendMail(templateParams);
         }else{
-            if(name === '' || name === undefined || name === null) {setIsMissingName(true);}else{setIsMissingName(false);}
-            if(country === '' || country === undefined || country === null) {setIsMissingCountry(true);}else{setIsMissingCountry(false);}
-            if(phone === '' || phone === undefined || phone === null) {setIsMissingPhone(true);}else{setIsMissingPhone(false);}
-            if(mail === '' || mail === undefined || mail === null) {setIsMissingMail(true);}else{setIsMissingMail(false);}
-            if(gamingConsole === '' || gamingConsole === undefined || gamingConsole === null) {setIsMissingGamingConsole(true);}else{setIsMissingGamingConsole(false);}
-            if(gamingId === '' || gamingId === undefined || gamingId === null) {setIsMissingGamingId(true);}else{setIsMissingGamingId(false);}
-            if(age === '' || age === undefined || age === null || parseInt(age) < 18) {setIsMissingAge(true);}else{setIsMissingAge(false);}
-            if(!checkedPrivacy) {setIsMissingCheckedPrivacy(true);}else{setIsMissingCheckedPrivacy(false);}
-            if(!checkedTerms) {setIsMissingCheckedTerms(true);}else{setIsMissingCheckedTerms(false);}
-            if(!checkedNewsletter) {setIsMissingCheckedNewsletter(true);}else{setIsMissingCheckedNewsletter(false);}
-            if(!checkedLegalAge) {setIsMissingCheckedLegalAge(true);}else{setIsMissingCheckedLegalAge(false);}
+            Object.keys(fieldData).forEach((key: string) => {
+                if(
+                    !fieldData[key as keyof fielDataType].value  && 
+                    fieldData[key as keyof fielDataType].value !== '0'
+                ){
+                    if((parseInt(fieldData.age.value) < 18)) {
+                        setIsMissingData((currValue) => ({
+                            ...currValue,
+                            ...{age: {value: true, label: 'age'}}
+                        }))
+                    }
+                    setIsMissingData((currValue) => ({
+                        ...currValue,
+                        ...{[key as keyof MissingDataType]: {value: true, label: isMissingData[key as keyof MissingDataType].label}}
+                    }))
+                }else{
+                    setIsMissingData((currValue) => ({
+                        ...currValue,
+                        ...{[key as keyof MissingDataType]: {value: false, label: isMissingData[key as keyof MissingDataType].label}}
+                    }))
+                }
+            })
         }
     }
     
@@ -129,49 +128,49 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
                             label={FIELD_LABEL.NOMBRE_DEL_JUGADOR} theme={theme} 
                             inputValue={fieldData} 
                             setInputValue={setFieldData} 
-                            hasMissingFields={isMissingName} 
+                            hasMissingFields={isMissingData.name.value} 
                         />
                         <TournamentSelector 
                             labelName={FIELD_DATA.country.label} 
                             label={FIELD_LABEL.PAIS} 
                             options={Object.values(COUNTRIES)} theme={theme} 
                             setSelectorState={setFieldData} 
-                            hasMissingFields={isMissingCountry} 
+                            hasMissingFields={isMissingData.country.value} 
                         />
                         <TournamentInput 
                             labelName={FIELD_DATA.phone.label} 
                             label={FIELD_LABEL.NUMERO_DE_TELEFONO} theme={theme} 
                             country={fieldData.country.value} inputValue={fieldData} 
                             setInputValue={setFieldData} 
-                            hasMissingFields={isMissingPhone} 
+                            hasMissingFields={isMissingData.phone.value} 
                         />
                         <TournamentInput 
                             labelName={FIELD_DATA.mail.label} 
                             label={FIELD_LABEL.CORREO_ELECTRONICO} theme={theme} 
                             inputValue={fieldData} 
                             setInputValue={setFieldData} 
-                            hasMissingFields={isMissingMail} 
+                            hasMissingFields={isMissingData.mail.value} 
                         />
                         <TournamentSelector 
                             labelName={FIELD_DATA.gamingConsole.label} 
                             label={FIELD_LABEL.CONSOLA_EN_LA_QUE_JUEGA} 
                             options={Object.values(GAMING_CONSOLE)} theme={theme} 
                             setSelectorState={setFieldData} 
-                            hasMissingFields={isMissingGamingConsole} 
+                            hasMissingFields={isMissingData.gamingConsole.value} 
                         />
                         <TournamentInput 
                             labelName={FIELD_DATA.gamingId.label} 
                             label={useGetUserId(fieldData.gamingConsole.value)} theme={theme} 
                             inputValue={fieldData} 
                             setInputValue={setFieldData} 
-                            hasMissingFields={isMissingGamingId} 
+                            hasMissingFields={isMissingData.gamingId.value} 
                         />
                         <TournamentInput 
                             labelName={FIELD_DATA.age.label} 
                             label={FIELD_LABEL.EDAD} width={40} theme={theme} 
                             inputValue={fieldData} 
                             setInputValue={setFieldData} 
-                            hasMissingFields={isMissingAge} 
+                            hasMissingFields={isMissingData.age.value} 
                         />
                         <div style={{marginTop: '5px'}}>
                             <TournamentCheckbox 
@@ -182,7 +181,7 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
                                 theme={theme} 
                                 isChecked={fieldData.checkedPrivacy.value} 
                                 setIsChecked={setFieldData} 
-                                hasMissingFields={isMissinghCheckedPrivacy} 
+                                hasMissingFields={isMissingData.checkedPrivacy.value} 
                             />
                             <TournamentCheckbox 
                                 labelName={FIELD_DATA.checkedTerms.label} 
@@ -192,7 +191,7 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
                                 theme={theme} 
                                 isChecked={fieldData.checkedTerms.value} 
                                 setIsChecked={setFieldData} 
-                                hasMissingFields={isMissingCheckedTerms} 
+                                hasMissingFields={isMissingData.checkedTerms.value} 
                             />
                             <TournamentCheckbox 
                                 labelName={FIELD_DATA.checkedNewsletter.label} 
@@ -200,7 +199,7 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
                                 theme={theme} 
                                 isChecked={fieldData.checkedNewsletter.value} 
                                 setIsChecked={setFieldData} 
-                                hasMissingFields={isMissingCheckedNewsletter} 
+                                hasMissingFields={isMissingData.checkedNewsletter.value} 
                             />
                             <TournamentCheckbox 
                                 labelName={FIELD_DATA.checkedLegalAge.label} 
@@ -208,7 +207,7 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
                                 theme={theme} 
                                 isChecked={fieldData.checkedLegalAge.value} 
                                 setIsChecked={setFieldData} 
-                                hasMissingFields={isMissingCheckedLegalAge} 
+                                hasMissingFields={isMissingData.checkedLegalAge.value} 
                             />
                             <p style={{fontSize: '11px', padding: '0 14px', margin: '5px  0'}}>*Todos los campos son obligatorios</p>
                         </div>
