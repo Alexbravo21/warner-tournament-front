@@ -47,6 +47,34 @@ export const FIELD_LABEL = {
     EDAD : 'Edad (+18)',
 }
 
+export const FIELD_DATA = {
+    gamingConsole: {value: '', label: 'gamingConsole'},
+    country: {value: '', label: 'country'},
+    name: {value: '', label: 'name'},
+    phone: {value: '', label: 'phone'},
+    mail: {value: '', label: 'mail'},
+    gamingId: {value: '', label: 'gamingId'},
+    age: {value: '', label: 'age'},
+    checkedPrivacy: {value: false, label: 'checkedPrivacy'},
+    checkedTerms: {value: false, label: 'checkedTerms'},
+    checkedLegalAge: {value: false, label: 'checkedLegalAge'},
+    checkedNewsletter: {value: false, label: 'checkedNewsletter'},
+}
+
+export const MISSING_DATA = {
+    gamingConsole: {value: false, label: 'gamingConsole'},
+    country: {value: false, label: 'country'},
+    name: {value: false, label: 'name'},
+    phone: {value: false, label: 'phone'},
+    mail: {value: false, label: 'mail'},
+    gamingId: {value: false, label: 'gamingId'},
+    age: {value: false, label: 'age'},
+    checkedPrivacy: {value: false, label: 'checkedPrivacy'},
+    checkedTerms: {value: false, label: 'checkedTerms'},
+    checkedLegalAge: {value: false, label: 'checkedLegalAge'},
+    checkedNewsletter: {value: false, label: 'checkedNewsletter'},
+}
+
 export const GAMING_CONSOLE = {
     XBOX_ONE: 'Xbox',
     XBOX_SERIES: 'Xbox Series X/S',

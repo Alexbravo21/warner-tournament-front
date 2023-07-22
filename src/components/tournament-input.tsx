@@ -1,8 +1,26 @@
-import { ThemeType } from '../utils/types';
+import { ThemeType, fielDataType } from '../utils/types';
 import { COUNTRY_CODES } from '../utils/constants';
 
 
-const TournamentInput = ({ label, width = 100, theme, country, inputValue, setInputValue, hasMissingFields }:{ label : string, width?: number, theme: ThemeType, country?: string | null, inputValue: string | null, setInputValue: (arg0: string) => void, hasMissingFields: boolean }) => {
+const TournamentInput = ({ 
+    label, 
+    width = 100, 
+    theme, 
+    country, 
+    inputValue, 
+    setInputValue, 
+    hasMissingFields,
+    labelName,
+}:{ 
+    label : string, 
+    width?: number, 
+    theme: ThemeType, 
+    country?: string | null, 
+    inputValue: fielDataType, 
+    setInputValue: (arg0: (currData: fielDataType) => fielDataType) => void, 
+    hasMissingFields: boolean,
+    labelName: string,
+}) => {
     const tournamentInputStyle = {
         borderRadius:'30px',
         borderColor: theme.mortal_kombat.border_color,
@@ -20,9 +38,17 @@ const TournamentInput = ({ label, width = 100, theme, country, inputValue, setIn
             <label htmlFor="" style={{paddingLeft:'15px'}}>{label}</label>
             <input 
                 // @ts-ignore TODO
-                value={country && !inputValue ? COUNTRY_CODES[country] : inputValue} 
+                value={country && inputValue[labelName].value === '' ? COUNTRY_CODES[country] : inputValue[labelName].value} 
                 type="text" style={{...tournamentInputStyle, width: `${width}%`}}
-                onInput={(e) => setInputValue(e.currentTarget.value)}
+                onInput={(e) => setInputValue( (currData: fielDataType) => ({
+                    ...currData, 
+                    ...{
+                        [labelName]:{
+                            value: e.currentTarget.value,
+                            label: labelName,
+                        }
+                    }
+                }))}
             />
         </div>
     )
