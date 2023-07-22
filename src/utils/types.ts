@@ -23,3 +23,17 @@ export type TemplateParamsType = {
     age: string | null,
     newsletter: string | null,
 }
+
+export type fielDataType = {
+    gamingConsole: {value: string, label: string},
+    country: {value: string, label: string},
+    name: {value: string, label: string},
+    phone: {value: string, label: string},
+    mail: {value: string, label: string},
+    gamingId: {value: string, label: string},
+    age: {value: string, label: string},
+    checkedPrivacy: {value: boolean, label: string},
+    checkedTerms: {value: boolean, label: string},
+    checkedLegalAge: {value: boolean, label: string},
+    checkedNewsletter: {value: boolean, label: string},
+}
