@@ -14,7 +14,7 @@ import TournamentCheckbox from './tournament-checkbox';
 import TournamentButton from './tournament-button';
 import { useGetUserId, useMediaQuery } from '../utils/hooks';
 import { ThemeType, TemplateParamsType, fielDataType, MissingDataType } from '../utils/types';
-import ThanksMsg from './thanks-msg';
+import InfoMsg from './info-msg';
 
 const tournamentFormStyle = (theme: ThemeType, isMobile: boolean) => ({
     width: '100%',
@@ -30,6 +30,7 @@ const tournamentFormStyle = (theme: ThemeType, isMobile: boolean) => ({
     marginTop: isMobile ? '5vh' : '8vh',
     overflow: 'auto',
 })
+const showEndRegisty: boolean = true;
 
 'esports@juegoslevelup.com'
 
@@ -96,7 +97,6 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
                 ){
                     //TODO: Refactor this as it works because it runs on every key iteration and it changes the age.value in any of these iterations
                     if((parseInt(fieldData.age.value) < 18)) {
-                        console.log("holoooo")
                         setIsMissingData((currValue) => ({
                             ...currValue,
                             ...{age: {value: true, label: 'age'}}
@@ -120,107 +120,117 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
     const isMobile = useMediaQuery('(max-width: 390px)');
     return(
         <div style={{margin: '0 auto', width: `${theme.formWidth}px`, maxWidth: '90vw'}}>
-            {!showThanks ? (
-                <>
-                    <div style={tournamentFormStyle(theme, isMobile)}>
-                        <TournamentInput 
-                            labelName={FIELD_DATA.name.label} 
-                            label={FIELD_LABEL.NOMBRE_DEL_JUGADOR} theme={theme} 
-                            inputValue={fieldData} 
-                            setInputValue={setFieldData} 
-                            hasMissingFields={isMissingData.name.value} 
-                        />
-                        <TournamentSelector 
-                            labelName={FIELD_DATA.country.label} 
-                            label={FIELD_LABEL.PAIS} 
-                            options={Object.values(COUNTRIES)} theme={theme} 
-                            setSelectorState={setFieldData} 
-                            hasMissingFields={isMissingData.country.value} 
-                        />
-                        <TournamentInput 
-                            labelName={FIELD_DATA.phone.label} 
-                            label={FIELD_LABEL.NUMERO_DE_TELEFONO} theme={theme} 
-                            country={fieldData.country.value} inputValue={fieldData} 
-                            setInputValue={setFieldData} 
-                            hasMissingFields={isMissingData.phone.value} 
-                        />
-                        <TournamentInput 
-                            labelName={FIELD_DATA.mail.label} 
-                            label={FIELD_LABEL.CORREO_ELECTRONICO} theme={theme} 
-                            inputValue={fieldData} 
-                            setInputValue={setFieldData} 
-                            hasMissingFields={isMissingData.mail.value} 
-                        />
-                        <TournamentSelector 
-                            labelName={FIELD_DATA.gamingConsole.label} 
-                            label={FIELD_LABEL.CONSOLA_EN_LA_QUE_JUEGA} 
-                            options={Object.values(GAMING_CONSOLE)} theme={theme} 
-                            setSelectorState={setFieldData} 
-                            hasMissingFields={isMissingData.gamingConsole.value} 
-                        />
-                        <TournamentInput 
-                            labelName={FIELD_DATA.gamingId.label} 
-                            label={useGetUserId(fieldData.gamingConsole.value)} theme={theme} 
-                            inputValue={fieldData} 
-                            setInputValue={setFieldData} 
-                            hasMissingFields={isMissingData.gamingId.value} 
-                        />
-                        <TournamentInput 
-                            labelName={FIELD_DATA.age.label} 
-                            label={FIELD_LABEL.EDAD} width={40} theme={theme} 
-                            inputValue={fieldData} 
-                            setInputValue={setFieldData} 
-                            hasMissingFields={isMissingData.age.value} 
-                        />
-                        <div style={{marginTop: '5px'}}>
-                            <TournamentCheckbox 
-                                labelName={FIELD_DATA.checkedPrivacy.label} 
-                                labelText='Acepto que he leido el' 
-                                labelLink='aviso de privacidad.' 
-                                url='https://policies.warnerbros.com/terms/es-latam/html/terms_es-latam_1.0.0.html' 
-                                theme={theme} 
-                                isChecked={fieldData.checkedPrivacy.value} 
-                                setIsChecked={setFieldData} 
-                                hasMissingFields={isMissingData.checkedPrivacy.value} 
-                            />
-                            <TournamentCheckbox 
-                                labelName={FIELD_DATA.checkedTerms.label} 
-                                labelText='Acepto' 
-                                labelLink='términos y condiciones.' 
-                                url='/T&C_MK11v1307.pdf' 
-                                theme={theme} 
-                                isChecked={fieldData.checkedTerms.value} 
-                                setIsChecked={setFieldData} 
-                                hasMissingFields={isMissingData.checkedTerms.value} 
-                            />
-                            <TournamentCheckbox 
-                                labelName={FIELD_DATA.checkedNewsletter.label} 
-                                labelText='Suscribirme a la Newsletter de Warner Play' 
-                                theme={theme} 
-                                isChecked={fieldData.checkedNewsletter.value} 
-                                setIsChecked={setFieldData} 
-                                hasMissingFields={isMissingData.checkedNewsletter.value} 
-                            />
-                            <TournamentCheckbox 
-                                labelName={FIELD_DATA.checkedLegalAge.label} 
-                                labelText='Confirmo que soy mayor de edad' 
-                                theme={theme} 
-                                isChecked={fieldData.checkedLegalAge.value} 
-                                setIsChecked={setFieldData} 
-                                hasMissingFields={isMissingData.checkedLegalAge.value} 
-                            />
-                            <p style={{fontSize: '11px', padding: '0 14px', margin: '5px  0'}}>*Todos los campos son obligatorios</p>
-                        </div>
-                    </div>
-                    <TournamentButton 
-                        cta='Enviar' theme={theme} 
-                        onClick={handleSubmit} 
-                        buttonLoading={buttonLoading} 
+            {showEndRegisty ? (
+                <InfoMsg theme={theme} isMobile={isMobile}>
+                    <img src="/warner_play_logo.jpg" alt="Warner Play" width='150px' />
+                    <p style={{fontSize: '25px'}}>El periodo de registro ha finalizado</p>
+                    <p style={{fontSize: '25px', color: theme.mortal_kombat.text_color_bold}}>¡Gracias por participar!</p>
+                    <p style={{fontSize: '22px', padding: '0 30px', marginBottom: 0}}>Espera noticias nuestras muy pronto...</p>
+                </InfoMsg>
+            ) : (showThanks ? (
+                <InfoMsg theme={theme} isMobile={isMobile}>
+                    <p style={{fontSize: '25px', marginTop: 0}}>¡Gracias por Participar!</p>
+                    <p style={{fontSize: '22px', padding: '0 30px'}}>Nos contactaremos en breve...</p>
+                    <img src="/warner_play_logo.jpg" alt="Warner Play" width='150px' />
+                </InfoMsg>
+            ) : (<>
+                <div style={tournamentFormStyle(theme, isMobile)}>
+                    <TournamentInput 
+                        labelName={FIELD_DATA.name.label} 
+                        label={FIELD_LABEL.NOMBRE_DEL_JUGADOR} theme={theme} 
+                        inputValue={fieldData} 
+                        setInputValue={setFieldData} 
+                        hasMissingFields={isMissingData.name.value} 
                     />
-                </>
-            ) : (
-                <ThanksMsg theme={theme} isMobile={isMobile} />
-            )}
+                    <TournamentSelector 
+                        labelName={FIELD_DATA.country.label} 
+                        label={FIELD_LABEL.PAIS} 
+                        options={Object.values(COUNTRIES)} theme={theme} 
+                        setSelectorState={setFieldData} 
+                        hasMissingFields={isMissingData.country.value} 
+                    />
+                    <TournamentInput 
+                        labelName={FIELD_DATA.phone.label} 
+                        label={FIELD_LABEL.NUMERO_DE_TELEFONO} theme={theme} 
+                        country={fieldData.country.value} inputValue={fieldData} 
+                        setInputValue={setFieldData} 
+                        hasMissingFields={isMissingData.phone.value} 
+                    />
+                    <TournamentInput 
+                        labelName={FIELD_DATA.mail.label} 
+                        label={FIELD_LABEL.CORREO_ELECTRONICO} theme={theme} 
+                        inputValue={fieldData} 
+                        setInputValue={setFieldData} 
+                        hasMissingFields={isMissingData.mail.value} 
+                    />
+                    <TournamentSelector 
+                        labelName={FIELD_DATA.gamingConsole.label} 
+                        label={FIELD_LABEL.CONSOLA_EN_LA_QUE_JUEGA} 
+                        options={Object.values(GAMING_CONSOLE)} theme={theme} 
+                        setSelectorState={setFieldData} 
+                        hasMissingFields={isMissingData.gamingConsole.value} 
+                    />
+                    <TournamentInput 
+                        labelName={FIELD_DATA.gamingId.label} 
+                        label={useGetUserId(fieldData.gamingConsole.value)} theme={theme} 
+                        inputValue={fieldData} 
+                        setInputValue={setFieldData} 
+                        hasMissingFields={isMissingData.gamingId.value} 
+                    />
+                    <TournamentInput 
+                        labelName={FIELD_DATA.age.label} 
+                        label={FIELD_LABEL.EDAD} width={40} theme={theme} 
+                        inputValue={fieldData} 
+                        setInputValue={setFieldData} 
+                        hasMissingFields={isMissingData.age.value} 
+                    />
+                    <div style={{marginTop: '5px'}}>
+                        <TournamentCheckbox 
+                            labelName={FIELD_DATA.checkedPrivacy.label} 
+                            labelText='Acepto que he leido el' 
+                            labelLink='aviso de privacidad.' 
+                            url='https://policies.warnerbros.com/terms/es-latam/html/terms_es-latam_1.0.0.html' 
+                            theme={theme} 
+                            isChecked={fieldData.checkedPrivacy.value} 
+                            setIsChecked={setFieldData} 
+                            hasMissingFields={isMissingData.checkedPrivacy.value} 
+                        />
+                        <TournamentCheckbox 
+                            labelName={FIELD_DATA.checkedTerms.label} 
+                            labelText='Acepto' 
+                            labelLink='términos y condiciones.' 
+                            url='/T&C_MK11v1307.pdf' 
+                            theme={theme} 
+                            isChecked={fieldData.checkedTerms.value} 
+                            setIsChecked={setFieldData} 
+                            hasMissingFields={isMissingData.checkedTerms.value} 
+                        />
+                        <TournamentCheckbox 
+                            labelName={FIELD_DATA.checkedNewsletter.label} 
+                            labelText='Suscribirme a la Newsletter de Warner Play' 
+                            theme={theme} 
+                            isChecked={fieldData.checkedNewsletter.value} 
+                            setIsChecked={setFieldData} 
+                            hasMissingFields={isMissingData.checkedNewsletter.value} 
+                        />
+                        <TournamentCheckbox 
+                            labelName={FIELD_DATA.checkedLegalAge.label} 
+                            labelText='Confirmo que soy mayor de edad' 
+                            theme={theme} 
+                            isChecked={fieldData.checkedLegalAge.value} 
+                            setIsChecked={setFieldData} 
+                            hasMissingFields={isMissingData.checkedLegalAge.value} 
+                        />
+                        <p style={{fontSize: '11px', padding: '0 14px', margin: '5px  0'}}>*Todos los campos son obligatorios</p>
+                    </div>
+                </div>
+                <TournamentButton 
+                    cta='Enviar' theme={theme} 
+                    onClick={handleSubmit} 
+                    buttonLoading={buttonLoading} 
+                />
+            </>
+            ))}
             
         </div>
     )
