@@ -17,11 +17,11 @@ export type TemplateParamsType = {
     name: string | null,
     country: string | null,
     phone: string | null,
-    mail: string | null,
+    email: string | null,
     gamingConsole: string | null,
-    gamingId: string | null,
+    gamerId: string | null,
     age: string | null,
-    newsletter: string | null,
+    newsLetter: boolean,
 }
 
 export type fielDataType = {

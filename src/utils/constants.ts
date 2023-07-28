@@ -82,3 +82,6 @@ export const GAMING_CONSOLE = {
     PS5: 'PlayStation 5',
     PC: 'PC',
 }
+
+export const API = 'https://backend-warner-nk4uddlpuq-uc.a.run.app';
+export const DEV_API = 'http://localhost:5000';

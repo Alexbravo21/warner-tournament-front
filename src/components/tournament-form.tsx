@@ -1,12 +1,13 @@
 import { useState } from 'preact/hooks';
 import { JSX } from 'preact';
-import emailjs from '@emailjs/browser';
 import {
     FIELD_LABEL, 
     COUNTRIES, 
     GAMING_CONSOLE, 
     FIELD_DATA, 
-    MISSING_DATA 
+    MISSING_DATA,
+    DEV_API,
+    API,
 } from '../utils/constants'
 import TournamentInput from './tournament-input';
 import TournamentSelector from './tournament-selector';
@@ -30,7 +31,7 @@ const tournamentFormStyle = (theme: ThemeType, isMobile: boolean) => ({
     marginTop: isMobile ? '5vh' : '8vh',
     overflow: 'auto',
 })
-const showEndRegisty: boolean = true;
+const showEndRegisty: boolean = false;
 
 'esports@juegoslevelup.com'
 
@@ -55,15 +56,29 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
         checkedLegalAge,
     } = fieldData;
 
-    const sendMail = (templateParams: TemplateParamsType) => {
-        emailjs.send('service_dbwf38t', 'template_fgzy6po', templateParams, '4di1TLKuQ-VAf7TjU')
-        .then((result) => {
-            setShowThanks(true);
-            setButtonLoading(false);
-            console.log(result.text);
-        }, (error) => {
-            console.log(error.text);
-        });
+    const sendData = async (templateParams: TemplateParamsType) => {
+        try {
+            const response = await fetch(`${import.meta.env.DEV ? DEV_API : API}/register-participant`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': "*",
+                },
+                body: JSON.stringify(templateParams),
+            });
+            const data = await response.json();
+            console.log(response);
+            console.log(response.status);
+            console.log(data);
+            if(response.status === 200){
+                setShowThanks(true);
+                setButtonLoading(false);
+            } else {
+                throw (data.reason);
+            }
+        } catch(error) {
+            console.log(error);
+        }
     }
     const handleSubmit = (e: JSX.TargetedMouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -71,11 +86,11 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
             name: name.value,
             country: country.value,
             phone: phone.value,
-            mail: mail.value,
+            email: mail.value,
             gamingConsole: gamingConsole.value,
-            gamingId: gamingId.value,
+            gamerId: gamingId.value,
             age: age.value,
-            newsletter: checkedNewsletter.value ? 'Si' : 'No',
+            newsLetter: checkedNewsletter.value,
         }
         const isFormFilled = !Object.values(templateParams).some((val) => !val && val !== '0' );
         if(
@@ -88,7 +103,8 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
             && parseInt(age.value) >= 18
         ) {
             setButtonLoading(true);
-            sendMail(templateParams);
+            sendData(templateParams);
+            //sendMail(templateParams);
         }else{
             Object.keys(fieldData).forEach((key: string) => {
                 if(
@@ -123,7 +139,7 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
             {showEndRegisty ? (
                 <InfoMsg theme={theme} isMobile={isMobile}>
                     <img src="/warner_play_logo.jpg" alt="Warner Play" width='150px' />
-                    <p style={{fontSize: '25px'}}>El periodo de registro ha finalizado</p>
+                    <p style={{fontSize: '25px'}}>El periodo de registro ha finalizado.</p>
                     <p style={{fontSize: '25px', color: theme.mortal_kombat.text_color_bold}}>¡Gracias por participar!</p>
                     <p style={{fontSize: '22px', padding: '0 30px', marginBottom: 0}}>Espera noticias nuestras muy pronto...</p>
                 </InfoMsg>
