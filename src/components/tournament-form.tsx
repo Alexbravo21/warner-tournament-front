@@ -31,7 +31,7 @@ const tournamentFormStyle = (theme: ThemeType, isMobile: boolean) => ({
     marginTop: isMobile ? '5vh' : '8vh',
     overflow: 'auto',
 })
-const showEndRegisty: boolean = false;
+const showEndRegisty: boolean = true;
 
 'esports@juegoslevelup.com'
 
@@ -67,9 +67,6 @@ const TournamentForm = ({ theme } : {theme: ThemeType}) => {
                 body: JSON.stringify(templateParams),
             });
             const data = await response.json();
-            console.log(response);
-            console.log(response.status);
-            console.log(data);
             if(response.status === 200){
                 setShowThanks(true);
                 setButtonLoading(false);
