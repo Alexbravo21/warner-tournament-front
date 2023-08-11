@@ -85,3 +85,4 @@ export const GAMING_CONSOLE = {
 
 export const API = 'https://backend-warner-nk4uddlpuq-uc.a.run.app';
 export const DEV_API = 'http://localhost:5000';
+export const TEST_HOSTNAMES = ['warner-tournament.firebaseapp.com', 'warner-tournament.web.app'];

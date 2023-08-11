@@ -8,6 +8,7 @@ import {
     MISSING_DATA,
     DEV_API,
     API,
+    TEST_HOSTNAMES,
 } from '../utils/constants'
 import TournamentInput from './tournament-input';
 import TournamentSelector from './tournament-selector';
@@ -31,7 +32,7 @@ const tournamentFormStyle = (theme: ThemeType, isMobile: boolean) => ({
     marginTop: isMobile ? '5vh' : '8vh',
     overflow: 'auto',
 })
-const showEndRegisty: boolean = true;
+const showEndRegisty: boolean = !TEST_HOSTNAMES.includes(window.location.hostname);
 
 'esports@juegoslevelup.com'
 
