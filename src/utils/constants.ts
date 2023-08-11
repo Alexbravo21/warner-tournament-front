@@ -8,13 +8,13 @@ export const USER_ID = {
 export const COUNTRIES = {
     ARGENTINA: 'Argentina',
     COLOMBIA: 'Colombia',
-    //MEXICO: 'México',
+    MEXICO: 'México',
 }
 
 export const COUNTRY_CODES: {[key: string]: string} = {
     Argentina: '+54',
     Colombia: '+57',
-    //México: '+52',
+    México: '+52',
 }
 
 export const THEME = {
